@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - FHY WaBotUI</title>
+	<meta name="description" content="FHY WaBot adalah bot WhatsApp otomatis yang memudahkan komunikasi dengan fitur canggih dan kemudahan pengelolaan pesan secara efektif." />
+	<meta name="keywords" content="FHY WaBot, WhatsApp bot, bot otomatis, pengelolaan pesan WhatsApp, fitur chatbot, WhatsApp API, bot WA" />
+	<link rel="icon" type="image/png" href="/ss1.png" sizes="32x32" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .chat-bubble {
+            margin-bottom: 10px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+		.sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-700 text-white">
+    <header class="w-full flex justify-between fixed px-4 py-3 z-40 bg-gray-700">
+		<a href="/dashboard" class="flex">
+            <img src="/ss.png" class="h-9 w-auto" alt="FHY WaBotUI">
+			<span class="text-xs font-bold text-gray-300">v1.7</span>
+        </a>
+		<div class="gap-2 items-center hidden md:flex">
+			<a href="/message" class="relative bg-gray-900 hover:bg-gray-800 text-white p-2 rounded group">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+				  <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
+				</svg>
+				<span class="absolute -ml-3 left-1/2 transform -translate-x-1/2 translate-y-2 bg-gray-900 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+					Send Messages
+				</span>
+			</a>
+			<a href="/settings" class="relative bg-gray-900 hover:bg-gray-800 text-white p-2 rounded group">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+				  <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+				  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+				</svg>
+				<span class="absolute -ml-3 left-1/2 transform -translate-x-1/2 translate-y-2 bg-gray-900 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+					Settings
+				</span>
+			</a>
+			<button id="clearHistoryBtn" class="relative bg-gray-900 hover:bg-gray-800 text-white p-2 rounded group">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+					<path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+				</svg>
+				<span class="absolute -ml-6 left-1/2 transform -translate-x-1/2 translate-y-2 bg-gray-900 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+					Clear History
+				</span>
+			</button>
+			<button class="relative bg-gray-900 hover:bg-gray-800 text-white p-2 rounded group" id="restartServerButton">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+				  <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+				</svg>
+				<span class="absolute -ml-6 left-1/2 transform -translate-x-1/2 translate-y-2 bg-gray-900 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+					Restart Server
+				</span>
+			</button>
+			<button id="deleteAuthInfoBtn" class="relative group bg-rose-700 hover:bg-red-600 text-white p-2 rounded">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+				  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+				</svg>
+				<span class="absolute -ml-6 left-1/2 transform -translate-x-1/2 translate-y-2 bg-gray-900 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+					Logout Auth
+				</span>
+			</button>
+		</div>
+		<button id="toggleSidebar" class="flex md:hidden text-white bg-gray-900 hover:bg-gray-800 p-2 rounded">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+			  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
+			</svg>
+		</button>
+	</header>
+	<div id="sidebar" class="sidebar fixed z-50 inset-0 bg-gray-800 bg-opacity-75 transform -translate-x-full">
+		<div class="relative flex flex-col w-64 bg-gray-900 text-white h-full shadow-md">
+			<div class="p-4">
+				<h2 class="text-lg font-semibold">Menu</h2>
+			</div>
+			<nav class="flex flex-col gap-1 p-4">
+				<a href="/message" class="hover:bg-gray-800 flex gap-2 p-2 rounded">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+					  <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
+					</svg>
+					<span>
+						Send Messages
+					</span>
+				</a>
+				<a href="/settings" class="hover:bg-gray-800 flex gap-2 p-2 rounded">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+					  <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+					  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+					</svg>
+					<span>
+						Settings
+					</span>
+				</a>
+				<button id="clearHistoryBtn" class="hover:bg-gray-800 flex gap-2 p-2 rounded">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+						<path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+					</svg>
+					<span>
+						Clear History
+					</span>
+				</button>
+				<button class="hover:bg-gray-800 flex gap-2 p-2 rounded" id="restartServerButton">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+					  <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+					</svg>
+					<span>
+						Restart Server
+					</span>
+				</button>
+				<button id="deleteAuthInfoBtn" class="hover:bg-gray-800 flex gap-2 p-2 rounded">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+					  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+					</svg>
+					<span>
+						Logout Auth
+					</span>
+				</button>
+			</nav>
+			<button id="closeSidebar" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-rose-700 hover:bg-rose-500 text-white px-1 py-4 rounded-l">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5">
+				  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+				</svg>
+			</button>
+		</div>
+	</div>
+	
+    <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4 pt-16 pb-4 px-4 h-screen">
+        <div class="bg-gray-800 rounded">
+            <h2 class="font-semibold text-xl p-4 flex justify-center bg-gray-900">Group Messages</h2>
+            <div id="groupMessageContainer" class="flex flex-col p-4 h-[75vh] overflow-y-auto"></div>
+        </div>
+        <div class="bg-gray-800 rounded">
+            <h2 class="font-semibold text-xl p-4 flex justify-center bg-gray-900">Private / Bot Response Messages</h2>
+            <div id="privateMessageContainer" class="flex flex-col p-4 h-[75vh] overflow-y-auto"></div>
+        </div>
+    </div>
+	<footer class="mt-6 mb-4">
+			<p class="text-center text-gray-300">
+				©<script>document.write(new Date().getFullYear());</script> <a href="https://i-as.dev/" class="text-emerald-600 font-semibold">I-As.Dev</a>. All Rights Reserved.
+			</p>
+	</footer>
+	
+	<div id="confirmationModal" class="fixed z-50 inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center hidden">
+        <div class="bg-gray-700 text-white rounded-lg p-6 w-80">
+            <h2 class="text-xl font-bold mb-4 text-center">Confirmation</h2>
+            <p class="mb-4 text-center">Are you sure you want to reload the server?</p>
+            <div class="flex justify-center gap-4 mt-6">
+                <button id="confirmButton" class="flex gap-2 items-center bg-emerald-600 hover:bg-emerald-700 py-2 px-4 rounded">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+						<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+					</svg>
+					<span>Yes</span>
+				</button>
+                <button id="cancelButton" class="flex gap-2 items-center bg-rose-700 hover:bg-rose-600 py-2 px-4 rounded">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+					  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+					</svg>
+					<span>No</span>
+				</button>
+            </div>
+            <p id="countdownText" class="px-4 py-2 bg-amber-600 rounded mt-4 text-center text-sm hidden">Waiting for <span id="countdown" class="font-bold">3</span> second...</p>
+        </div>
+    </div>
+	
+	<div id="clearHistoryModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+		<div class="bg-gray-700 p-6 rounded-lg">
+			<h2 class="text-xl  mb-4 font-bold text-center">Clear History</h2>
+			<p>Are you sure you want to clear the message history?</p>
+			<div class="flex justify-center items-center mt-4 gap-2">
+				<button id="confirmClearHistoryBtn" class="flex gap-2 items-center px-4 py-2 bg-rose-700 hover:bg-rose-800 rounded text-white">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+						<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+					</svg>
+					<span>Yes</span>
+				</button>
+				<button id="cancelClearHistoryBtn" class="flex gap-2 items-center px-4 py-2 bg-gray-800 hover:bg-gray-900 rounded text-white">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+					  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+					</svg>
+					<span>No</span>
+				</button>
+			</div>
+		</div>
+	</div>
+
+<script>
+	const restartButton = document.getElementById('restartServerButton');
+	const confirmationModal = document.getElementById('confirmationModal');
+	const confirmButton = document.getElementById('confirmButton');
+	const cancelButton = document.getElementById('cancelButton');
+	const countdownText = document.getElementById('countdownText');
+	const countdownElement = document.getElementById('countdown');
+
+	const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+	const clearHistoryModal = document.getElementById('clearHistoryModal');
+	const cancelClearHistoryBtn = document.getElementById('cancelClearHistoryBtn');
+	const confirmClearHistoryBtn = document.getElementById('confirmClearHistoryBtn');
+
+	const toggleSidebarButton = document.getElementById('toggleSidebar');
+	const sidebar = document.getElementById('sidebar');
+	const closeSidebarButton = document.getElementById('closeSidebar');
+
+	toggleSidebarButton.addEventListener('click', () => {
+		sidebar.classList.toggle('-translate-x-full');
+	});
+
+	closeSidebarButton.addEventListener('click', () => {
+		sidebar.classList.add('-translate-x-full');
+	});
+	
+	const ws = new WebSocket(`ws://${window.location.host}`);
+
+	ws.onmessage = (event) => {
+		const data = JSON.parse(event.data);
+		if (data.messageData) {
+			const messageData = data.messageData;
+			let messageDiv = document.createElement('div');
+			messageDiv.classList.add('chat-bubble');
+
+			if (messageData.group) {
+				messageDiv.classList.add('flex');
+				messageDiv.innerHTML = `
+					<div class="bg-gray-600 rounded">
+						<div class="p-2">
+							<span class="font-bold">${messageData.group}</span>
+							<span>(${messageData.participant})</span>
+						</div>
+						<p class="p-2 bg-gray-700">${messageData.message}</p>
+					</div>
+				`;
+				document.getElementById('groupMessageContainer').appendChild(messageDiv);
+			} else {
+				messageDiv.classList.add('flex');
+				messageDiv.innerHTML = `
+					<div class="bg-gray-600 rounded">
+						<div class="p-2">
+							<span class="font-bold">${messageData.sender}</span>
+						</div>
+						<p class="bg-gray-700 p-2">${messageData.message}</p>
+					</div>
+				`;
+				document.getElementById('privateMessageContainer').appendChild(messageDiv);
+			}
+
+			const messages = JSON.parse(localStorage.getItem('messageHistory')) || [];
+			messages.push(messageData);
+			localStorage.setItem('messageHistory', JSON.stringify(messages));
+
+			const activeContainer = messageData.group ? 'groupMessageContainer' : 'privateMessageContainer';
+			const container = document.getElementById(activeContainer);
+			container.scrollTop = container.scrollHeight;
+		}
+	};
+
+	ws.onclose = () => {
+		console.log('WebSocket connection closed');
+	};
+
+	document.getElementById('deleteAuthInfoBtn').addEventListener('click', () => {
+		fetch('/delete-auth-info', { method: 'DELETE' })
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					alert(data.message);
+				} else {
+					alert('Failed to delete auth info: ' + data.message);
+				}
+				window.location.href = '/';
+			})
+			.catch(error => {
+				console.error('Error deleting auth info:', error);
+				alert('Error deleting auth info');
+			});
+		});
+
+	restartButton.onclick = () => {
+		confirmationModal.classList.remove('hidden');
+	};
+
+	confirmButton.onclick = () => {
+		confirmButton.classList.add('hidden');
+		cancelButton.classList.add('hidden');
+		countdownText.classList.remove('hidden');
+
+		let countdown = 3;
+		countdownElement.textContent = countdown;
+
+		const countdownInterval = setInterval(() => {
+			countdown--;
+			countdownElement.textContent = countdown;
+
+			if (countdown <= 0) {
+				clearInterval(countdownInterval);
+				location.reload();
+			}
+		}, 1000);
+
+		fetch('/restart-server', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		})
+		.then(response => response.json())
+		.then(data => {
+			if (data.success) {
+				console.log(data.message);
+			} else {
+				alert('Failed to restart server: ' + data.message);
+			}
+		})
+		.catch(error => {
+			console.error("Error restarting server:", error);
+			alert('Error restarting server');
+		});
+	};
+
+	cancelButton.onclick = () => {
+		confirmationModal.classList.add('hidden');
+	};
+
+	clearHistoryBtn.addEventListener('click', () => {
+		clearHistoryModal.classList.remove('hidden');
+	});
+	
+	cancelClearHistoryBtn.addEventListener('click', () => {
+		clearHistoryModal.classList.add('hidden');
+	});
+
+	confirmClearHistoryBtn.addEventListener('click', () => {
+		document.getElementById('groupMessageContainer').innerHTML = '';
+		document.getElementById('privateMessageContainer').innerHTML = '';
+		localStorage.removeItem('messageHistory');
+		clearHistoryModal.classList.add('hidden');
+		const successMessage = document.createElement('div');
+		successMessage.classList.add('fixed', 'top-4', 'right-4', 'bg-green-500', 'text-white', 'p-2', 'rounded');
+		successMessage.textContent = 'Riwayat pesan berhasil dihapus dari localStorage';
+		document.body.appendChild(successMessage);
+		setTimeout(() => {
+			successMessage.remove();
+		}, 3000);
+	});
+</script>
+
+</body>
+</html>

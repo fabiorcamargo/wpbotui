@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message - FHY WaBotUI</title>
+    <meta name="description" content="FHY WaBot adalah bot WhatsApp otomatis yang memudahkan komunikasi dengan fitur canggih dan kemudahan pengelolaan pesan secara efektif." />
+    <meta name="keywords" content="FHY WaBot, WhatsApp bot, bot otomatis, pengelolaan pesan WhatsApp, fitur chatbot, WhatsApp API, bot WA" />
+    <link rel="icon" type="image/png" href="/ss1.png" sizes="32x32" />
+    <script src="https://cdn.tailwindcss.com"></script>
+	<style>
+		.accordion-content {
+		  transition: max-height 0.3s ease, opacity 0.3s ease;
+		  max-height: 0;
+		  opacity: 0;
+		  overflow: hidden;
+		}
+		.accordion-content.show {
+		  max-height: 100vh;
+		  opacity: 1;
+		}
+	  </style>
+</head>
+<body class="bg-gray-700 text-white">
+    <header class="w-full flex justify-between px-4 py-3 bg-gray-700">
+        <a href="/dashboard" class="flex">
+            <img src="/ss.png" class="h-9 w-auto" alt="FHY WaBotUI">
+			<span class="text-xs font-bold text-gray-300">v1.7</span>
+        </a>
+        <div class="gap-2 items-center flex">
+			<button class="relative bg-gray-900 hover:bg-gray-800 text-white p-2 rounded group" id="restartServerButton">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+				  <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+				</svg>
+				<span class="absolute -ml-6 left-1/2 transform -translate-x-1/2 translate-y-2 bg-gray-900 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+					Restart Server
+				</span>
+			</button>
+            <a href="/dashboard" class="relative bg-gray-900 hover:bg-gray-800 text-white p-2 rounded group">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                </svg>
+                <span class="absolute -ml-6 left-1/2 transform -translate-x-1/2 translate-y-2 bg-gray-900 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                    Back Dashboard
+                </span>
+            </a>
+        </div>
+    </header>
+	
+    <div class="w-full px-4 pb-4">
+		<div class="bg-gray-900 p-4 rounded">
+			<h2 class="text-xl font-bold mb-4">Send Messages</h2>
+
+			<div class="accordion-item border-b border-gray-700">
+				<button class="accordion-header flex justify-between w-full p-4 text-left font-semibold focus:outline-none" onclick="toggleAccordion(1)">
+					Text
+					<span class="accordion-icon">+</span>
+				</button>
+				<div id="accordion-content-1" class="accordion-content bg-gray-800 rounded-t">
+					<div class="p-4 flex flex-col gap-2">
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Recipient Number</label>
+							<input id="idText" name="idText" type="number" class="p-2 rounded bg-gray-900 w-full focus:outline-none border border-gray-700" placeholder="628xxxxxxxxxx" required />
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Message Content</label>
+							<textarea id="messageText" name="messageText" type="text" rows="4" class="p-2 rounded bg-gray-900 w-full focus:outline-none border border-gray-700" placeholder="Enter your message.." required ></textarea>
+						</div>
+						<div class="flex justify-end mt-2">
+							<button type="button" onclick="sendMessageText()" class="flex items-center gap-2 bg-gray-700 hover:bg-blue-700 px-4 py-2 rounded">
+								Send
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+								  <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+								</svg>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item border-b border-gray-700">
+				<button class="accordion-header flex justify-between w-full p-4 text-left font-semibold focus:outline-none" onclick="toggleAccordion(2)">
+					Images
+					<span class="accordion-icon">+</span>
+				</button>
+				<div id="accordion-content-2" class="accordion-content bg-gray-800 rounded-t">
+					<div class="p-4 flex flex-col gap-2">
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Recipient Number</label>
+							<input id="idImage" name="idImage" type="number" class="p-2 rounded bg-gray-900 w-full focus:outline-none border border-gray-700" placeholder="628xxxxxxxxxx" required />
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Image Url</label>
+							<input id="urlImage" name="urlImage" type="url" class="p-2 rounded bg-gray-900 w-full focus:outline-none border border-gray-700" placeholder="Enter media url.." required />
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Caption</label>
+							<textarea id="captionImage" name="captionImage" type="text" rows="4" class="p-2 rounded bg-gray-900 w-full focus:outline-none border border-gray-700" placeholder="Enter your caption.." required ></textarea>
+						</div>
+						<div class="flex justify-end mt-2">
+							<button type="button" onclick="sendMessageImages()" class="flex items-center gap-2 bg-gray-700 hover:bg-blue-700 px-4 py-2 rounded">
+								Send
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+								  <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+								</svg>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item border-b border-gray-700">
+				<button class="accordion-header flex justify-between w-full p-4 text-left font-semibold focus:outline-none" onclick="toggleAccordion(3)">
+					Videos
+					<span class="accordion-icon">+</span>
+				</button>
+				<div id="accordion-content-3" class="accordion-content bg-gray-800 rounded-t">
+					<div class="p-4 flex flex-col gap-2">
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Recipient Number</label>
+							<input id="idVideo" name="idVideo" type="number" class="p-2 rounded bg-gray-900 w-full focus:outline-none border border-gray-700" placeholder="628xxxxxxxxxx" required />
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Video Url</label>
+							<input id="urlVideo" name="urlVideo" type="url" class="p-2 rounded bg-gray-900 w-full focus:outline-none border border-gray-700" placeholder="Enter media url.." required />
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Caption</label>
+							<textarea id="captionVideo" name="captionVideo" type="text" rows="4" class="p-2 rounded bg-gray-900 w-full focus:outline-none border border-gray-700" placeholder="Enter your caption.." required ></textarea>
+						</div>
+						<div class="flex justify-end mt-2">
+							<button type="button" onclick="sendMessageVideos()" class="flex items-center gap-2 bg-gray-700 hover:bg-blue-700 px-4 py-2 rounded">
+								Send
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+								  <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+								</svg>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item border-b border-gray-700">
+				<button class="accordion-header flex justify-between w-full p-4 text-left font-semibold focus:outline-none" onclick="toggleAccordion(4)">
+					Audios
+					<span class="accordion-icon">+</span>
+				</button>
+				<div id="accordion-content-4" class="accordion-content bg-gray-800 rounded-t">
+					<div class="p-4 flex flex-col gap-2">
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Recipient Number</label>
+							<input id="idAudio" name="idAudio" type="number" class="p-2 rounded bg-gray-900 w-full focus:outline-none border border-gray-700" placeholder="628xxxxxxxxxx" required />
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Audio Url</label>
+							<input id="urlAudio" name="urlAudio" type="url" class="p-2 rounded bg-gray-900 w-full focus:outline-none border border-gray-700" placeholder="Enter media url.." required />
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Caption</label>
+							<textarea id="captionAudio" name="captionAudio" type="text" rows="4" class="p-2 rounded bg-gray-900 w-full focus:outline-none border border-gray-700" placeholder="Enter your caption.." required ></textarea>
+						</div>
+						<div class="flex justify-end mt-2">
+							<button type="button" onclick="sendMessageAudios()" class="flex items-center gap-2 bg-gray-700 hover:bg-blue-700 px-4 py-2 rounded">
+								Send
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+								  <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+								</svg>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="accordion-item border-b border-gray-700">
+				<button class="accordion-header flex justify-between w-full p-4 text-left font-semibold focus:outline-none" onclick="toggleAccordion(5)">
+					Location
+					<span class="accordion-icon">+</span>
+				</button>
+				<div id="accordion-content-5" class="accordion-content bg-gray-800 rounded-t">
+					<div class="p-4 flex flex-col gap-2">
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Recipient Number</label>
+							<input id="idLocation" name="idLocation" type="number" class="p-2 rounded bg-gray-900 w-full focus:outline-none border border-gray-700" placeholder="628xxxxxxxxxx" required />
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Latitude</label>
+							<input id="latitude" name="latitude" type="text" class="p-2 rounded bg-gray-900 w-full focus:outline-none border border-gray-700" placeholder="Enter latitude 24.121.." required />
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Longitude</label>
+							<input id="longitude" name="longitude" type="text" class="p-2 rounded bg-gray-900 w-full focus:outline-none border border-gray-700" placeholder="Enter longitude 55.1121.." required />
+						</div>
+						<div class="flex justify-end mt-2">
+							<button type="button" onclick="sendMessageLocation()" class="flex items-center gap-2 bg-gray-700 hover:bg-blue-700 px-4 py-2 rounded">
+								Send
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+								  <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+								</svg>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		
+		<footer class="mt-6 mb-4">
+			<p class="text-center text-gray-300">
+				©<script>document.write(new Date().getFullYear());</script> <a href="https://i-as.dev/" class="text-emerald-600 font-semibold">I-As.Dev</a>. All Rights Reserved.
+			</p>
+		</footer>
+		
+    </div>
+	
+	<div id="confirmationModal" class="fixed z-50 inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center hidden">
+        <div class="bg-gray-700 text-white rounded-lg p-6 w-80">
+            <h2 class="text-xl font-bold mb-4 text-center">Confirmation</h2>
+            <p class="mb-4 text-center">Are you sure you want to reload the server?</p>
+            <div class="flex justify-center gap-4 mt-6">
+                <button id="confirmButton" class="flex gap-2 items-center bg-emerald-600 hover:bg-emerald-700 py-2 px-4 rounded">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+						<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+					</svg>
+					<span>Yes</span>
+				</button>
+                <button id="cancelButton" class="flex gap-2 items-center bg-rose-700 hover:bg-rose-600 py-2 px-4 rounded">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+					  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+					</svg>
+					<span>No</span>
+				</button>
+            </div>
+            <p id="countdownText" class="px-4 py-2 bg-amber-600 rounded mt-4 text-center text-sm hidden">Waiting for <span id="countdown" class="font-bold">3</span> second...</p>
+        </div>
+    </div>
+	
+	<div id="successModal" class="hidden fixed z-50 inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-gray-700 flex flex-col justify-center items-center p-6 rounded-lg shadow-lg text-center">
+            <p id="modalMessage" class="text-lg text-center font-semibold"></p>
+            <button class="flex gap-1 items-center mt-4 bg-rose-700 hover:bg-rose-800 text-white py-2 px-4 rounded" onclick="closeModal()">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+				  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+				</svg>
+				Close
+			</button>
+        </div>
+    </div>
+	
+	<script src="/js/SendMessage.js"></script>
+	<script>
+		const restartButton = document.getElementById('restartServerButton');
+		const confirmationModal = document.getElementById('confirmationModal');
+		const confirmButton = document.getElementById('confirmButton');
+		const cancelButton = document.getElementById('cancelButton');
+		const countdownText = document.getElementById('countdownText');
+		const countdownElement = document.getElementById('countdown');
+		
+		restartButton.onclick = () => {
+			confirmationModal.classList.remove('hidden');
+		};
+		confirmButton.onclick = () => {
+			confirmButton.classList.add('hidden');
+			cancelButton.classList.add('hidden');
+			countdownText.classList.remove('hidden');
+
+			let countdown = 3;
+			countdownElement.textContent = countdown;
+
+			const countdownInterval = setInterval(() => {
+				countdown--;
+				countdownElement.textContent = countdown;
+
+				if (countdown <= 0) {
+					clearInterval(countdownInterval);
+					location.reload();
+				}
+			}, 1000);
+
+			fetch('/restart-server', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				}
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					console.log(data.message);
+				} else {
+					alert('Failed to restart server: ' + data.message);
+				}
+			})
+			.catch(error => {
+				console.error("Error restarting server:", error);
+				alert('Error restarting server');
+			});
+		};
+		cancelButton.onclick = () => {
+			confirmationModal.classList.add('hidden');
+		};
+		
+		function toggleAccordion(index) {
+		  const content = document.getElementById(`accordion-content-${index}`);
+		  const icon = content.previousElementSibling.querySelector('.accordion-icon');
+		  if (!content.classList.contains('show')) {
+			document.querySelectorAll('.accordion-content').forEach((item) => item.classList.remove('show'));
+			document.querySelectorAll('.accordion-icon').forEach((item) => (item.textContent = '+'));
+			content.classList.add('show');
+			icon.textContent = '-';
+		  } else {
+			content.classList.remove('show');
+			icon.textContent = '+';
+		  }
+		}
+
+    </script>
+</body>
+</html>

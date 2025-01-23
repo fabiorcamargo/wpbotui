@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FHY WaBotUI - Automated WhatsApp Bot</title>
+	<meta name="description" content="FHY WaBot adalah bot WhatsApp otomatis yang memudahkan komunikasi dengan fitur canggih dan kemudahan pengelolaan pesan secara efektif." />
+	<meta name="keywords" content="FHY WaBot, WhatsApp bot, bot otomatis, pengelolaan pesan WhatsApp, fitur chatbot, WhatsApp API, bot WA" />
+	<link rel="icon" type="image/png" href="/ss1.png" sizes="32x32" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex flex-col justify-center items-center min-h-screen w-full bg-gray-900 text-gray-200">
+    <div class="p-6 rounded bg-gray-700 flex flex-col justify-center items-center max-w-sm">
+		<img src="/ss.png" class="h-16 w-auto" alt="FHY WaBotUI">
+		<p class="text-center py-4">
+			Scan QR Code to connect to Whastapp.
+		</p>
+		<div id="qrCodeContainer">
+			<img id="qrCode" src="" alt="QR Code" />
+		</div>
+		<span class="text-center py-2 text-xs">
+			Already connected? <a class="underline font-bold" href="#" onclick="location.reload();">RELOAD NOW</a>
+		</span>
+		<button class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-500 mt-4" id="restartServerButton">Restart Server</button>
+	</div>
+	<footer class="mt-6 mb-4">
+		<p class="text-center text-gray-300">
+			©<script>document.write(new Date().getFullYear());</script> <a href="https://i-as.dev/" class="text-emerald-600 font-semibold">I-As.Dev</a>. All Rights Reserved.
+		</p>
+	</footer>
+	
+	<div id="confirmationModal" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center hidden">
+        <div class="bg-gray-700 text-white rounded-lg p-6 w-80">
+            <h2 class="text-xl font-bold mb-4 text-center">Confirmation</h2>
+            <p class="mb-4 text-center">Are you sure you want to reload server?</p>
+            <div class="flex justify-center gap-4 mt-6">
+                <button id="confirmButton" class="bg-emerald-600 hover:bg-emerald-700 py-2 px-4 rounded">Yes</button>
+                <button id="cancelButton" class="bg-rose-700 hover:bg-rose-600 py-2 px-4 rounded">No</button>
+            </div>
+            <p id="countdownText" class="px-4 py-2 bg-amber-600 rounded mt-4 text-center text-sm hidden">Waiting for <span id="countdown" class="font-bold">5</span> detik...</p>
+        </div>
+    </div>
+	
+    <script>
+        const confirmationModal = document.getElementById('confirmationModal');
+        const confirmButton = document.getElementById('confirmButton');
+        const cancelButton = document.getElementById('cancelButton');
+        const countdownText = document.getElementById('countdownText');
+        const countdownElement = document.getElementById('countdown');
+		
+        const qrCodeImage = document.getElementById('qrCode');
+        const restartButton = document.getElementById('restartServerButton');
+
+        const ws = new WebSocket(`ws://${window.location.host}`);
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.qrCodeUrl) {
+                qrCodeImage.src = data.qrCodeUrl;
+            }
+        };
+        ws.onclose = () => {
+            console.log('WebSocket connection closed');
+        };
+
+		restartButton.onclick = () => {
+            confirmationModal.classList.remove('hidden');
+        };
+		
+		confirmButton.onclick = () => {
+            confirmButton.classList.add('hidden');
+            cancelButton.classList.add('hidden');
+            countdownText.classList.remove('hidden');
+
+            fetch('/restart-server', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log(data.message);
+
+                    let countdown = 5;
+                    const countdownInterval = setInterval(() => {
+                        if (countdown > 0) {
+                            countdownElement.textContent = countdown;
+                            countdown--;
+                        } else {
+                            clearInterval(countdownInterval);
+                            location.reload();
+                        }
+                    }, 1000);
+                }
+            })
+            .catch(error => console.error("Error restarting server:", error));
+        };
+		
+		cancelButton.onclick = () => {
+            confirmationModal.classList.add('hidden');
+        };
+		
+    </script>
+</body>
+</html>

@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - FHY WaBotUI</title>
+    <meta name="description" content="FHY WaBot adalah bot WhatsApp otomatis yang memudahkan komunikasi dengan fitur canggih dan kemudahan pengelolaan pesan secara efektif." />
+    <meta name="keywords" content="FHY WaBot, WhatsApp bot, bot otomatis, pengelolaan pesan WhatsApp, fitur chatbot, WhatsApp API, bot WA" />
+    <link rel="icon" type="image/png" href="/ss1.png" sizes="32x32" />
+    <script src="https://cdn.tailwindcss.com"></script>
+	
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+	
+	<style>
+		label > select {
+			border: 1px solid rgb(55 65 81) !important;
+			background-color: rgb(31 41 55) !important;
+		}
+		label > input {
+			border: 1px solid rgb(55, 65, 81) !important;
+			background-color: rgb(31, 41, 55) !important;
+			outline: none; 
+		}
+		label > input:focus {
+			outline: none; 
+		}
+		.even {
+			background-color: rgb(31, 41, 55, 0.5) !important;
+		}
+		thead > tr {
+			background-color: rgb(55 65 81) !important;
+		}
+	</style>
+</head>
+<body class="bg-gray-700 text-white">
+    <header class="w-full flex justify-between px-4 py-3 bg-gray-700">
+        <a href="/dashboard" class="flex">
+            <img src="/ss.png" class="h-9 w-auto" alt="FHY WaBotUI">
+			<span class="text-xs font-bold text-gray-300">v1.7</span>
+        </a>
+        <div class="gap-2 items-center flex">
+			<button class="relative bg-gray-900 hover:bg-gray-800 text-white p-2 rounded group" id="restartServerButton">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+				  <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+				</svg>
+				<span class="absolute -ml-6 left-1/2 transform -translate-x-1/2 translate-y-2 bg-gray-900 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+					Restart Server
+				</span>
+			</button>
+            <a href="/dashboard" class="relative bg-gray-900 hover:bg-gray-800 text-white p-2 rounded group">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                </svg>
+                <span class="absolute -ml-6 left-1/2 transform -translate-x-1/2 translate-y-2 bg-gray-900 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                    Back Dashboard
+                </span>
+            </a>
+        </div>
+    </header>
+	
+    <div class="w-full px-4 pb-4">
+	
+		<div class="tabs mb-4">
+            <ul class="flex border-b border-gray-900">
+                <li class="mr-1">
+                    <a href="#" data-tab="tab-settings" class="tab-link bg-gray-900 inline-block py-2 px-4 text-white font-semibold hover:bg-gray-800">
+						Settings
+					</a>
+                </li>
+                <li class="mr-1">
+                    <a href="#" data-tab="tab-command" class="tab-link bg-gray-900 inline-block py-2 px-4 text-white font-semibold hover:bg-gray-800">
+						Command
+					</a>
+                </li>
+                <li>
+                    <a href="#" data-tab="tab-custom" class="tab-link bg-gray-900 inline-block py-2 px-4 text-white font-semibold hover:bg-gray-800">
+						Custom
+					</a>
+                </li>
+            </ul>
+        </div>
+		
+		<div id="tab-settings" class="tab-content active">
+			<div class="w-full p-4 bg-gray-900 rounded mt-4">
+				<h2 class="text-2xl font-bold">Utility</h2>
+				<form action="/settings-utl" method="POST" class="flex flex-col gap-4 mt-4">
+					<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">QR Url</label>
+							<select name="QR_URL" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700">
+								<option value="true" <%= config.settings.QR_URL === true ? 'selected' : '' %>>Enable</option>
+								<option value="false" <%= config.settings.QR_URL === false ? 'selected' : '' %>>Disable</option>
+							</select>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Self Command</label>
+							<select name="SELF" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700">
+								<option value="true" <%= config.settings.SELF === true ? 'selected' : '' %>>Enable</option>
+								<option value="false" <%= config.settings.SELF === false ? 'selected' : '' %>>Disable</option>
+							</select>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Self Group Command</label>
+							<select name="SELF_GROUP" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700">
+								<option value="true" <%= config.settings.SELF_GROUP === true ? 'selected' : '' %>>Enable</option>
+								<option value="false" <%= config.settings.SELF_GROUP === false ? 'selected' : '' %>>Disable</option>
+							</select>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Anti Badwords <a href="#" id="editButtonBadwords" class="text-xs text-emerald-500 hover:text-emerald-600 underline">Edit</a></label>
+							<select name="ANTI_BADWORDS" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700">
+								<option value="true" <%= config.settings.ANTI_BADWORDS === true ? 'selected' : '' %>>Enable</option>
+								<option value="false" <%= config.settings.ANTI_BADWORDS === false ? 'selected' : '' %>>Disable</option>
+							</select>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Anti Link <a href="#" id="editButtonLink" class="text-xs text-emerald-500 hover:text-emerald-600 underline">Edit</a></label>
+							<select name="ANTI_LINK" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700">
+								<option value="true" <%= config.settings.ANTI_LINK === true ? 'selected' : '' %>>Enable</option>
+								<option value="false" <%= config.settings.ANTI_LINK === false ? 'selected' : '' %>>Disable</option>
+							</select>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Voice Language</label>
+							<select name="TO_VOICE" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700">
+								<option value="id" <%= config.settings.TO_VOICE === 'id' ? 'selected' : '' %>>Indonesia</option>
+								<option value="en" <%= config.settings.TO_VOICE === 'en' ? 'selected' : '' %>>English</option>
+								<option value="es" <%= config.settings.TO_VOICE === 'es' ? 'selected' : '' %>>Spanish</option>
+								<option value="fr" <%= config.settings.TO_VOICE === 'fr' ? 'selected' : '' %>>French</option>
+								<option value="de" <%= config.settings.TO_VOICE === 'de' ? 'selected' : '' %>>German</option>
+								<option value="it" <%= config.settings.TO_VOICE === 'it' ? 'selected' : '' %>>Italian</option>
+								<option value="ja" <%= config.settings.TO_VOICE === 'ja' ? 'selected' : '' %>>Japanese</option>
+								<option value="ko" <%= config.settings.TO_VOICE === 'ko' ? 'selected' : '' %>>Korean</option>
+								<option value="ru" <%= config.settings.TO_VOICE === 'ru' ? 'selected' : '' %>>Russian</option>
+								<option value="zh" <%= config.settings.TO_VOICE === 'zh' ? 'selected' : '' %>>Chinese</option>
+								<option value="ar" <%= config.settings.TO_VOICE === 'ar' ? 'selected' : '' %>>Arabic</option>
+								<option value="pt" <%= config.settings.TO_VOICE === 'pt' ? 'selected' : '' %>>Portuguese</option>
+							</select>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Wiki Language</label>
+							<select name="WIKI_LANG" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700">
+								<option value="id" <%= config.settings.WIKI_LANG === 'id' ? 'selected' : '' %>>Indonesia</option>
+								<option value="en" <%= config.settings.WIKI_LANG === 'en' ? 'selected' : '' %>>English</option>
+							</select>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Gemini Api Keys <span class="text-[10px]"><a class="text-emerald-500 hover:text-emerald-600 underline" href="https://aistudio.google.com/" target="_blank">Get API</a></span></label>
+							<input name="GEMINI_API" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.settings.GEMINI_API %>" onkeydown="return event.key !== ' '" />
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Gemini Prompt</label>
+							<input name="GEMINI_PROMPT" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.settings.GEMINI_PROMPT %>" onkeydown="return event.key !== ' '" />
+						</div>
+					</div>
+					<div class="flex justify-start mt-4">
+						<button type="submit" class="flex bg-gray-700 hover:bg-blue-700 px-4 py-2 rounded">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+							  <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+							</svg> 
+							Save
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		
+		<div id="tab-command" class="tab-content active hidden">
+			<div class="w-full p-4 bg-gray-900 rounded">
+				<h2 class="text-2xl font-bold">Command Group</h2>
+				<form action="/settings-group" method="POST" class="flex flex-col gap-2 mt-4">
+					<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Welcome Greetings <a href="#" id="buttonWelcome" class="text-xs text-emerald-500 hover:text-emerald-600 underline">Edit</a></label>
+							<select name="CMD_WELCOME" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700">
+								<option value="true" <%= config.cmdGroup.CMD_WELCOME === true ? 'selected' : '' %>>Enable</option>
+								<option value="false" <%= config.cmdGroup.CMD_WELCOME === false ? 'selected' : '' %>>Disable</option>
+							</select>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Goodbye Greetings <a href="#" id="buttonGoodbye" class="text-xs text-emerald-500 hover:text-emerald-600 underline">Edit</a></label>
+							<select name="CMD_GOODBYE" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700">
+								<option value="true" <%= config.cmdGroup.CMD_GOODBYE === true ? 'selected' : '' %>>Enable</option>
+								<option value="false" <%= config.cmdGroup.CMD_GOODBYE === false ? 'selected' : '' %>>Disable</option>
+							</select>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Add Member</label>
+							<input name="CMD_ADD" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmdGroup.CMD_ADD %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700 px-1">.add</code> 
+							628xxx</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Kick Member</label>
+							<input name="CMD_KICK" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmdGroup.CMD_KICK %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.kick</code> 
+							mention</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Change Title Group</label>
+							<input name="CMD_TITLE" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmdGroup.CMD_TITLE %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.group-title</code> 
+							new title</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Change Desc Group</label>
+							<input name="CMD_DESC" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmdGroup.CMD_DESC %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.group-desc</code> 
+							new desc</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Promote Member</label>
+							<input name="CMD_PROMOTE" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmdGroup.CMD_PROMOTE %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.promote</code> 
+							mentionc</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Demote Member</label>
+							<input name="CMD_DEMOTE" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmdGroup.CMD_DEMOTE %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.demote</code> 
+							mention</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Lock Chat</label>
+							<input name="CMD_LOCK_CHAT" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmdGroup.CMD_LOCK_CHAT %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.lock-chat</code> 
+							</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Unlock Chat</label>
+							<input name="CMD_UNLOCK_CHAT" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmdGroup.CMD_UNLOCK_CHAT %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.unlock-chat</code> 
+							</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Mention All</label>
+							<input name="CMD_TAG_ALL" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmdGroup.CMD_TAG_ALL %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.tagall</code> 
+							</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Group Info</label>
+							<input name="CMD_GROUP_META" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmdGroup.CMD_GROUP_META %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.groupmeta</code> 
+							</span>
+						</div>
+					</div>
+					<div class="flex justify-start mt-4">
+						<button type="submit" class="flex bg-gray-700 hover:bg-blue-700 px-4 py-2 rounded">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+							  <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+							</svg> 
+							Save
+						</button>
+					</div>
+				</form>
+				
+				<h2 class="text-2xl font-bold mt-9">Command Settings</h2>
+				<form action="/settings" method="POST" class="flex flex-col gap-2 mt-4">
+					
+					<h2 class="font-bold mt-4">Artificial Intelligence</h2>
+					<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Gemini AI</label>
+							<input name="CMD_GEMINI" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_GEMINI %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700 px-1">.ai</code> 
+							hello</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Gemini AI Image Analytic</label>
+							<input name="CMD_GEMINI_IMG" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_GEMINI_IMG %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: (quote) 
+							<code class="bg-gray-700">.aiimg</code> 
+							what this?</span>
+						</div>
+					</div>
+					
+					<h2 class="font-bold mt-4">Wikipedia</h2>
+					<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Wiki Search</label>
+							<input name="CMD_WIKIPEDIA_SEARCH" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_WIKIPEDIA_SEARCH %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.wiki-search</code> 
+							indonesia</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Wiki Image</label>
+							<input name="CMD_WIKIPEDIA_IMG" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_WIKIPEDIA_IMG %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.wiki-img</code> 
+							indonesia</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Wiki AI</label>
+							<input name="CMD_WIKIPEDIA_AI" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_WIKIPEDIA_AI %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.wiki-ai</code> 
+							indonesia</span>
+						</div>
+					</div>
+					
+					<h2 class="font-bold mt-4">Quran</h2>
+					<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Surah</label>
+							<input name="CMD_SURAH" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_SURAH %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.surah</code> 
+							1</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Surah Detail</label>
+							<input name="CMD_SURAH_DETAIL" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_SURAH_DETAIL %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.surah-detail</code> 
+							1:3</span>
+						</div>
+					</div>
+					
+					<h2 class="font-bold mt-4">Entertainment</h2>
+					<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Words of Wisdom <a href="#" id="buttonWords" class="text-xs text-emerald-500 hover:text-emerald-600 underline">Edit</a></label>
+							<input name="CMD_KATA" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_KATA %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.kata</code> 
+							</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Hecker Need Love <a href="#" id="buttonHecker" class="text-xs text-emerald-500 hover:text-emerald-600 underline">Edit</a></label>
+							<input name="CMD_KECKER" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_KECKER %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.hecker</code> 
+							</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Dilan <a href="#" id="buttonDilan" class="text-xs text-emerald-500 hover:text-emerald-600 underline">Edit</a></label>
+							<input name="CMD_DILAN" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_DILAN %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.dilan</code> 
+							</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Need Love <a href="#" id="buttonBucin" class="text-xs text-emerald-500 hover:text-emerald-600 underline">Edit</a></label>
+							<input name="CMD_BUCIN" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_BUCIN %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.bucin</code> 
+							</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Quote <a href="#" id="buttonQuote" class="text-xs text-emerald-500 hover:text-emerald-600 underline">Edit</a></label>
+							<input name="CMD_QUOTE" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_QUOTE %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.quote</code> 
+							</span>
+						</div>
+					</div>
+					
+					<h2 class="font-bold mt-4">Encrypts</h2>
+					<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">AES Encrypt</label>
+							<input name="CMD_AES_ENC" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_AES_ENC %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.aes-enc</code> 
+							hellos</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">AES Decrypt</label>
+							<input name="CMD_AES_DEC" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_AES_DEC %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.aes-dec</code> 
+							text enc</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Camelia Encrypt</label>
+							<input name="CMD_CAMELIA_ENC" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_CAMELIA_ENC %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.cam-enc</code> 
+							hellos</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Camelia Decrypt</label>
+							<input name="CMD_CAMELIA_DES" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_CAMELIA_DES %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.cam-dec</code> 
+							text enc</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">SHA Encrypt</label>
+							<input name="CMD_SHA" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_SHA %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.sha</code> 
+							hellos</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">MD5 Encrypt</label>
+							<input name="CMD_MD5" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_MD5 %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.md5</code> 
+							hellos</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Ripemd Encrypt</label>
+							<input name="CMD_RIPEMD" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_RIPEMD %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.ripemd</code> 
+							hellos</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Bcrypt Encrypt</label>
+							<input name="CMD_BCRYPT" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_BCRYPT %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.bcrypt</code> 
+							hello</span>
+						</div>
+					</div>
+					
+					<h2 class="font-bold mt-4">Downloader</h2>
+					<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Twitter MP4 Download</label>
+							<input name="CMD_TWDLMP4" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_TWDLMP4 %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.twdl-mp4</code>
+							url</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Twitter MP3 Download</label>
+							<input name="CMD_TWDLMP3" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_TWDLMP3 %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.twdl-mp3</code>
+							url</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Instagram MP4 Download</label>
+							<input name="CMD_IGDLMP4" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_IGDLMP4 %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.igdl-mp4</code>
+							url</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Instagram MP3 Download</label>
+							<input name="CMD_IGDLMP3" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_IGDLMP3 %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.igdl-mp3</code>
+							url</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">TikTok MP4 Download</label>
+							<input name="CMD_TKDLMP4" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_TKDLMP4 %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.tkdl-mp4</code>
+							 url</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">TikTok MP3 Download</label>
+							<input name="CMD_TKDLMP3" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_TKDLMP3 %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.tkdl-mp3</code>
+							 url</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Vimeo MP4 Download</label>
+							<input name="CMD_VMDLMP4" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_VMDLMP4 %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.vmdl-mp4</code>
+							 url</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Vimeo MP3 Download</label>
+							<input name="CMD_VMDLMP3" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_VMDLMP3 %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.vmdl-mp3</code>
+							 url</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Facebook MP4 Download</label>
+							<input name="CMD_FBDLMP4" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_FBDLMP4 %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.fbdl-mp4</code>
+							 url</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Facebook MP3 Download</label>
+							<input name="CMD_FBDLMP3" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_FBDLMP3 %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.fbdl-mp3</code>
+							 url</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">YouTube MP4 YouTube</label>
+							<input name="CMD_YTDLMP4" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_YTDLMP4 %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.ytdl-mp4</code>
+							 url</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">YouTube MP3 YouTube</label>
+							<input name="CMD_YTDLMP3" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_YTDLMP3 %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.ytdl-mp3</code>
+							 url</span>
+						</div>
+					</div>
+					
+					<h2 class="font-bold mt-4">File Search</h2>
+					<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">PDF</label>
+							<input name="CMD_PDF" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_PDF %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g:
+							<code class="bg-gray-700">.pdf</code> 
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">DOC</label>
+							<input name="CMD_DOC" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_DOC %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g:
+							<code class="bg-gray-700">.doc</code> 
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">DOCX</label>
+							<input name="CMD_DOCX" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_DOCX %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g:
+							<code class="bg-gray-700">.docx</code> 
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">XLS</label>
+							<input name="CMD_XLS" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_XLS %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g:
+							<code class="bg-gray-700">.xls</code> 
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">XLSX</label>
+							<input name="CMD_XLSX" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_XLSX %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g:
+							<code class="bg-gray-700">.xlsx</code> 
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">PPT</label>
+							<input name="CMD_PPT" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_PPT %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g:
+							<code class="bg-gray-700">.ppt</code> 
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">PPTX</label>
+							<input name="CMD_PPTX" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_PPTX %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g:
+							<code class="bg-gray-700">.pptx</code> 
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">TXT</label>
+							<input name="CMD_TXT" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_TXT %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g:
+							<code class="bg-gray-700">.txt</code> 
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">HTML</label>
+							<input name="CMD_HTML" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_HTML %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g:
+							<code class="bg-gray-700">.html</code> 
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">HTM</label>
+							<input name="CMD_HTM" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_HTM %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g:
+							<code class="bg-gray-700">.htm</code> 
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">CSV</label>
+							<input name="CMD_CSV" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_CSV %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g:
+							<code class="bg-gray-700">.csv</code> 
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">RTF</label>
+							<input name="CMD_RTF" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_RTF %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g:
+							<code class="bg-gray-700">.rtf</code> 
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">ODT</label>
+							<input name="CMD_ODT" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_ODT %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g:
+							<code class="bg-gray-700">.odt</code> 
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">ODS</label>
+							<input name="CMD_ODS" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_ODS %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g:
+							<code class="bg-gray-700">.ods</code> 
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">ODP</label>
+							<input name="CMD_ODP" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_ODP %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g:
+							<code class="bg-gray-700">.odp</code> 
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">EPUB</label>
+							<input name="CMD_EPUB" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_EPUB %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g:
+							<code class="bg-gray-700">.epub</code> 
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">ZIP</label>
+							<input name="CMD_ZIP" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_ZIP %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g:
+							<code class="bg-gray-700">.zip</code> 
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">GZ</label>
+							<input name="CMD_GZ" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_GZ %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g:
+							<code class="bg-gray-700">.gz</code> 
+							query</span>
+						</div>
+					</div>
+					
+					<h2 class="font-bold mt-4">Miscellaneous</h2>
+					<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Sticker Maker</label>
+							<input name="CMD_STICKER" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_STICKER %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: (quote) 
+							<code class="bg-gray-700">.sticker</code>
+							</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Text to Voice</label>
+							<input name="CMD_TO_VOICE" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_TO_VOICE %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.tovoice</code>
+							apa kabar!
+							</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Country Info</label>
+							<input name="CMD_COUNTRY" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_COUNTRY %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.country</code> 
+							indonesia</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Weather Info</label>
+							<input name="CMD_WEATHER" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_WEATHER %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.weather</code> 
+							jakarta</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">SEO Info</label>
+							<input name="CMD_SEO" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_SEO %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.seo</code> 
+							youtube.com</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Screenshoot Web</label>
+							<input name="CMD_SSWEB" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_SSWEB %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.ssweb</code> 
+							youtube.com</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Screenshoot Mobile</label>
+							<input name="CMD_SSMOBILE" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_SSMOBILE %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.ssmobile</code> 
+							youtube.com</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Github Stalker</label>
+							<input name="CMD_GITHUB" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_GITHUB %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.github</code> 
+							username</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Github Search Repository</label>
+							<input name="CMD_GITHUB_REPO" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_GITHUB_REPO %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.repo</code> 
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">OCR (Image To Text)</label>
+							<input name="CMD_OCR" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_OCR %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: (quote) 
+							<code class="bg-gray-700">.ocr</code> 
+							</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Count Words</label>
+							<input name="CMD_COUNT_WORDS" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_COUNT_WORDS %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.count-words</code> 
+							hello</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">QRCode Generator</label>
+							<input name="CMD_QRCODE" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_QRCODE %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.qrcode</code> 
+							hello</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Translate Text</label>
+							<input name="CMD_TRANSLATE" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_TRANSLATE %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.translate-</code>id 
+							eat</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Compare Product Prices</label>
+							<input name="CMD_GOOGLE_PRODUCT" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_GOOGLE_PRODUCT %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.check-price</code>  
+							laptop</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">SSL Lockup</label>
+							<input name="CMD_SSL_LOCKUP" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_SSL_LOCKUP %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.ssl</code>  
+							domain</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">DNS Lockup</label>
+							<input name="CMD_DSN_LOCKUP" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_DSN_LOCKUP %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.dns</code>  
+							domain</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">HTTP Lockup</label>
+							<input name="CMD_HTTP_LOCKUP" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_HTTP_LOCKUP %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.http</code>  
+							domain</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Check Vulnerability</label>
+							<input name="CMD_VULNERABILITY" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_VULNERABILITY %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.check</code>  
+							domain</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Certificate Maker</label>
+							<input name="CMD_CERTIFICATE" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_CERTIFICATE %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.certificate</code>  
+							name</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Walpaper</label>
+							<input name="CMD_WALLPAPER" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_WALLPAPER %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.wallpaper</code>  
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">FreePik</label>
+							<input name="CMD_FREEPIK" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_FREEPIK %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.freepik</code>  
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Ringtone</label>
+							<input name="CMD_RINGTONE" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_RINGTONE %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.ringtone</code>  
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">Youtube</label>
+							<input name="CMD_YOUTUBE" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_YOUTUBE %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.youtube</code>  
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">App Playstore</label>
+							<input name="CMD_PLAYSTORE" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_PLAYSTORE %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.playstore</code>  
+							query</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label class="text-xs md:text-sm">BitCoin Update</label>
+							<input name="CMD_BITCOIN" class="p-2 rounded bg-gray-800 w-full focus:outline-none border border-gray-700" value="<%= config.cmd.CMD_BITCOIN %>" onkeydown="return event.key !== ' '" />
+							<span class="text-xs text-gray-300">e.g: 
+							<code class="bg-gray-700">.bitcoin</code>  
+							</span>
+						</div>
+					</div>
+					
+					<div class="flex justify-start mt-4">
+						<button type="submit" class="flex bg-gray-700 hover:bg-blue-700 px-4 py-2 rounded">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+							  <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+							</svg> 
+							Save
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		
+		<div id="tab-custom" class="tab-content active hidden">
+			<div class="w-full overflow-x-auto p-4 bg-gray-900 rounded">
+				<div class="flex justify-end mb-4">
+					<button id="editFile" class="flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-blue-700 text-white rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+						</svg>
+						<span>Edit</span>
+					</button>
+				</div>
+				<table id="table-custom" class="display w-full responsive pt-2">
+					<thead>
+						<tr>
+							<th>CMD</th>
+							<th>Quote Reply</th>
+							<th>Type</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% function formatType(type) {
+							const formatted = type
+								.replace(/([A-Z])/g, ' $1')
+								.replace(/^./, (str) => str.toUpperCase());
+							return formatted.trim();
+						}%>
+						<% Object.keys(autoResponse).forEach(type => { %>
+							<% const commandObj = autoResponse[type]; %>
+							<% Object.keys(commandObj).forEach(cmd => { %>
+								<tr>
+									<td><%= cmd %></td>
+									<td>
+										<% if (commandObj[cmd].reply) { %>
+											<span>
+												<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+												  <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+												</svg>
+											</span>
+										<% } else { %>
+											<span>
+												<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+												  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+												</svg>
+											</span>
+										<% } %>
+									</td>
+									<td><%= formatType(type) %></td>
+								</tr>
+							<% }); %>
+						<% }); %>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		<footer class="mt-6 mb-4">
+			<p class="text-center text-gray-300">
+				©<script>document.write(new Date().getFullYear());</script> <a href="https://i-as.dev/" class="text-emerald-600 font-semibold">I-As.Dev</a>. All Rights Reserved.
+			</p>
+		</footer>
+		
+    </div>
+
+	<div id="editFileModal" class="fixed inset-0 hidden bg-gray-800 bg-opacity-90 flex items-center justify-center">
+		<div class="bg-gray-700 rounded-lg w-full max-w-3xl shadow-lg p-6">
+			<h2 class="text-xl text-center font-semibold mb-4">Edit Auto Command</h2>
+			<form action="/settings/update" method="POST">
+				<div class="flex">
+					<textarea name="autoCommand" class="p-4 w-full bg-gray-800 rounded overflow-auto h-[75vh] focus:outline-none" placeholder="Your text here..."><%- JSON.stringify(autoResponse, null, 2) %></textarea>
+				</div>
+				<div class="flex justify-end gap-2 mt-4">
+					<button type="submit" class="bg-gray-800 flex items-center gap-2 hover:bg-blue-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+							<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+						</svg> 
+						Save
+					</button>
+					<button type="button" id="closeModal" class="bg-gray-800 flex items-center gap-2 hover:bg-red-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+						  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+						</svg>
+						Close
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<div id="editModalBadwords" class="hidden fixed inset-0 bg-gray-800 bg-opacity-90 flex items-center justify-center">
+		<div class="bg-gray-700 rounded-lg w-full max-w-3xl shadow-lg p-6">
+			<div class="flex flex-col gap-1">
+				<h2 class="text-xl text-center font-semibold">Edit Badwords List</h2>
+				<span class="text-center mb-4 text-xs">Separate with commas</span>
+			</div>
+			<form action="/update-badwords" method="POST">
+				<div class="flex">
+					<textarea name="badwords" class="p-4 w-full bg-gray-800 rounded overflow-auto h-[75vh] focus:outline-none" placeholder="Enter bad words separated by commas..."><%- config.badwords.join(', ') %></textarea>
+				</div>
+				<div class="flex justify-end gap-2 mt-4">
+					<button type="submit" class="bg-gray-800 flex items-center gap-2 hover:bg-blue-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+							<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+						</svg> 
+						Save
+					</button>
+					<button type="button" id="closeModalBadwords" class="bg-gray-800 flex items-center gap-2 hover:bg-red-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+						  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+						</svg>
+						Close
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+		
+	<div id="editModalLink" class="hidden fixed inset-0 bg-gray-800 bg-opacity-90 flex items-center justify-center">
+		<div class="bg-gray-700 rounded-lg w-full max-w-3xl shadow-lg p-6">
+			<div class="flex flex-col gap-1">
+				<h2 class="text-xl text-center font-semibold">Edit Link Excluded</h2>
+				<span class="text-center mb-4 text-xs">Separate with commas</span>
+			</div>
+			<form action="/update-link" method="POST">
+				<div class="flex">
+					<textarea name="linkExcluded" class="p-4 w-full bg-gray-800 rounded overflow-auto h-[75vh] focus:outline-none" placeholder="Enter bad words separated by commas..."><%- config.excludeLinks.join(', ') %></textarea>
+				</div>
+				<div class="flex justify-end gap-2 mt-4">
+					<button type="submit" class="bg-gray-800 flex items-center gap-2 hover:bg-blue-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+							<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+						</svg> 
+						Save
+					</button>
+					<button type="button" id="closeModalLink" class="bg-gray-800 flex items-center gap-2 hover:bg-red-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+						  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+						</svg>
+						Close
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<div id="confirmationModal" class="fixed z-50 inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center hidden">
+        <div class="bg-gray-700 text-white rounded-lg p-6 w-80">
+            <h2 class="text-xl font-bold mb-4 text-center">Confirmation</h2>
+            <p class="mb-4 text-center">Are you sure you want to reload the server?</p>
+            <div class="flex justify-center gap-4 mt-6">
+                <button id="confirmButton" class="flex gap-2 items-center bg-emerald-600 hover:bg-emerald-700 py-2 px-4 rounded">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+						<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+					</svg>
+					<span>Yes</span>
+				</button>
+                <button id="cancelButton" class="flex gap-2 items-center bg-rose-700 hover:bg-rose-600 py-2 px-4 rounded">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+					  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+					</svg>
+					<span>No</span>
+				</button>
+            </div>
+            <p id="countdownText" class="px-4 py-2 bg-amber-600 rounded mt-4 text-center text-sm hidden">Waiting for <span id="countdown" class="font-bold">3</span> second...</p>
+        </div>
+    </div>
+	
+	<div id="modalWords" class="hidden fixed inset-0 bg-gray-800 bg-opacity-90 flex items-center justify-center">
+		<div class="bg-gray-700 rounded-lg w-full max-w-3xl shadow-lg p-6">
+			<div class="flex flex-col gap-1 mb-4">
+				<h2 class="text-xl text-center font-semibold">Edit Words Random</h2>
+			</div>
+			<form action="/settings/katakata" method="POST">
+				<div class="flex">
+					<textarea name="kataKata" class="p-4 w-full bg-gray-800 rounded overflow-auto h-[75vh] focus:outline-none" placeholder="Enter bad words separated by new lines..."><%= JSON.stringify(entertain.kataKata, null, 2) %></textarea>
+				</div>
+				<div class="flex justify-end gap-2 mt-4">
+					<button type="submit" class="bg-gray-800 flex items-center gap-2 hover:bg-blue-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+							<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+						</svg> 
+						Save
+					</button>
+					<button type="button" id="closeModalWords" class="bg-gray-800 flex items-center gap-2 hover:bg-red-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+						  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+						</svg>
+						Close
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<div id="modalHecker" class="hidden fixed inset-0 bg-gray-800 bg-opacity-90 flex items-center justify-center">
+		<div class="bg-gray-700 rounded-lg w-full max-w-3xl shadow-lg p-6">
+			<div class="flex flex-col gap-1 mb-4">
+				<h2 class="text-xl text-center font-semibold">Edit Hecker Random</h2>
+			</div>
+			<form action="/settings/hecker" method="POST">
+				<div class="flex">
+					<textarea name="hecker" class="p-4 w-full bg-gray-800 rounded overflow-auto h-[75vh] focus:outline-none" placeholder="Enter bad words separated by commas..."><%= JSON.stringify(entertain.hecker, null, 2) %></textarea>
+				</div>
+				<div class="flex justify-end gap-2 mt-4">
+					<button type="submit" class="bg-gray-800 flex items-center gap-2 hover:bg-blue-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+							<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+						</svg> 
+						Save
+					</button>
+					<button type="button" id="closeModalHecker" class="bg-gray-800 flex items-center gap-2 hover:bg-red-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+						  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+						</svg>
+						Close
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<div id="modalBucin" class="hidden fixed inset-0 bg-gray-800 bg-opacity-90 flex items-center justify-center">
+		<div class="bg-gray-700 rounded-lg w-full max-w-3xl shadow-lg p-6">
+			<div class="flex flex-col gap-1 mb-4">
+				<h2 class="text-xl text-center font-semibold">Edit Bucin Random</h2>
+			</div>
+			<form action="/settings/bucin" method="POST">
+				<div class="flex">
+					<textarea name="bucin" class="p-4 w-full bg-gray-800 rounded overflow-auto h-[75vh] focus:outline-none" placeholder="Enter bad words separated by commas..."><%= JSON.stringify(entertain.bucin, null, 2) %></textarea>
+				</div>
+				<div class="flex justify-end gap-2 mt-4">
+					<button type="submit" class="bg-gray-800 flex items-center gap-2 hover:bg-blue-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+							<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+						</svg> 
+						Save
+					</button>
+					<button type="button" id="closeModalBucin" class="bg-gray-800 flex items-center gap-2 hover:bg-red-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+						  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+						</svg>
+						Close
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<div id="modalDilan" class="hidden fixed inset-0 bg-gray-800 bg-opacity-90 flex items-center justify-center">
+		<div class="bg-gray-700 rounded-lg w-full max-w-3xl shadow-lg p-6">
+			<div class="flex flex-col gap-1 mb-4">
+				<h2 class="text-xl text-center font-semibold">Edit Dilan Random</h2>
+			</div>
+			<form action="/settings/dilan" method="POST">
+				<div class="flex">
+					<textarea name="dilan" class="p-4 w-full bg-gray-800 rounded overflow-auto h-[75vh] focus:outline-none" placeholder="Enter bad words separated by commas..."><%= JSON.stringify(entertain.dilan, null, 2) %></textarea>
+				</div>
+				<div class="flex justify-end gap-2 mt-4">
+					<button type="submit" class="bg-gray-800 flex items-center gap-2 hover:bg-blue-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+							<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+						</svg> 
+						Save
+					</button>
+					<button type="button" id="closeModalDilan" class="bg-gray-800 flex items-center gap-2 hover:bg-red-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+						  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+						</svg>
+						Close
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<div id="modalQuote" class="hidden fixed inset-0 bg-gray-800 bg-opacity-90 flex items-center justify-center">
+		<div class="bg-gray-700 rounded-lg w-full max-w-3xl shadow-lg p-6">
+			<div class="flex flex-col gap-1 mb-4">
+				<h2 class="text-xl text-center font-semibold">Edit Quote Random</h2>
+			</div>
+			<form action="/settings/quote" method="POST">
+				<div class="flex">
+					<textarea name="quote" class="p-4 w-full bg-gray-800 rounded overflow-auto h-[75vh] focus:outline-none" placeholder="Enter bad words separated by commas..."><%= JSON.stringify(entertain.quote, null, 2) %></textarea>
+				</div>
+				<div class="flex justify-end gap-2 mt-4">
+					<button type="submit" class="bg-gray-800 flex items-center gap-2 hover:bg-blue-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+							<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+						</svg> 
+						Save
+					</button>
+					<button type="button" id="closeModalQuote" class="bg-gray-800 flex items-center gap-2 hover:bg-red-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+						  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+						</svg>
+						Close
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<div id="modalWelcome" class="hidden fixed inset-0 bg-gray-800 bg-opacity-90 flex items-center justify-center">
+		<div class="bg-gray-700 rounded-lg w-full max-w-3xl shadow-lg p-6">
+			<div class="flex flex-col gap-1 mb-4">
+				<h2 class="text-xl text-center font-semibold">Edit Welcome Text</h2>
+			</div>
+			<form action="/edit-welcome" method="POST">
+				<div class="flex">
+					<textarea name="welcomeGreeting" class="p-4 w-full bg-gray-800 rounded overflow-auto h-[75vh] focus:outline-none" placeholder="Enter text..."><%= config.cmdGroup.CMD_WELCOME_TEXT %></textarea>
+				</div>
+				<div class="flex justify-end gap-2 mt-4">
+					<button type="submit" class="bg-gray-800 flex items-center gap-2 hover:bg-blue-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+							<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+						</svg> 
+						Save
+					</button>
+					<button type="button" id="closeModalWelcome" class="bg-gray-800 flex items-center gap-2 hover:bg-red-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+						  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+						</svg>
+						Close
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<div id="modalGoodbye" class="hidden fixed inset-0 bg-gray-800 bg-opacity-90 flex items-center justify-center">
+		<div class="bg-gray-700 rounded-lg w-full max-w-3xl shadow-lg p-6">
+			<div class="flex flex-col gap-1 mb-4">
+				<h2 class="text-xl text-center font-semibold">Edit Welcome Text</h2>
+			</div>
+			<form action="/edit-goodbye" method="POST">
+				<div class="flex">
+					<textarea name="goodbyeGreeting" class="p-4 w-full bg-gray-800 rounded overflow-auto h-[75vh] focus:outline-none" placeholder="Enter text..."><%= config.cmdGroup.CMD_GOODBYE_TEXT %></textarea>
+				</div>
+				<div class="flex justify-end gap-2 mt-4">
+					<button type="submit" class="bg-gray-800 flex items-center gap-2 hover:bg-blue-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+							<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+						</svg> 
+						Save
+					</button>
+					<button type="button" id="closeModalGoodbye" class="bg-gray-800 flex items-center gap-2 hover:bg-red-800 text-white px-4 py-2 rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+						  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+						</svg>
+						Close
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<script>
+		$('#table-custom').DataTable({
+			"pageLength": 30,
+			"lengthMenu": [ 
+				[10, 30, 50, -1],
+				[10, 30, 50, "All"]
+			],
+			"language": {
+				"lengthMenu": "_MENU_",
+				"zeroRecords": "No data found",
+				"info": "_PAGE_ | _PAGES_",
+				"infoEmpty": "",
+				"infoFiltered": "",
+				"search": "",
+				"paginate": {
+					"first": "First",
+					"last": "Last",
+					"next": "Next",
+					"previous": "Prev"
+				}
+			}
+		});
+		
+		
+		const restartButton = document.getElementById('restartServerButton');
+		const confirmationModal = document.getElementById('confirmationModal');
+		const confirmButton = document.getElementById('confirmButton');
+		const cancelButton = document.getElementById('cancelButton');
+		const countdownText = document.getElementById('countdownText');
+		const countdownElement = document.getElementById('countdown');
+		
+		restartButton.onclick = () => {
+			confirmationModal.classList.remove('hidden');
+		};
+		confirmButton.onclick = () => {
+			confirmButton.classList.add('hidden');
+			cancelButton.classList.add('hidden');
+			countdownText.classList.remove('hidden');
+
+			let countdown = 3;
+			countdownElement.textContent = countdown;
+
+			const countdownInterval = setInterval(() => {
+				countdown--;
+				countdownElement.textContent = countdown;
+
+				if (countdown <= 0) {
+					clearInterval(countdownInterval);
+					location.reload();
+				}
+			}, 1000);
+
+			fetch('/restart-server', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				}
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					console.log(data.message);
+				} else {
+					alert('Failed to restart server: ' + data.message);
+				}
+			})
+			.catch(error => {
+				console.error("Error restarting server:", error);
+				alert('Error restarting server');
+			});
+		};
+		cancelButton.onclick = () => {
+			confirmationModal.classList.add('hidden');
+		};
+        const tabs = document.querySelectorAll('.tab-link');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const target = this.getAttribute('data-tab');
+
+                tabs.forEach(t => {
+                    t.classList.remove('bg-gray-800');
+                    t.classList.add('bg-gray-900');
+                });
+                tabContents.forEach(content => {
+                    content.classList.add('hidden');
+                });
+
+                this.classList.remove('bg-gray-900');
+                this.classList.add('bg-gray-800');
+                document.getElementById(target).classList.remove('hidden');
+            });
+        });
+		
+		
+        const modal = document.getElementById('editFileModal');
+        const editFileButton = document.getElementById('editFile');
+        const closeModal = document.getElementById('closeModal');
+        editFileButton.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+        });
+        closeModal.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+		
+		const modalBadwords = document.getElementById('editModalBadwords');
+        const buttonBadwords = document.getElementById('editButtonBadwords');
+        const closeModalBadwords = document.getElementById('closeModalBadwords');
+        buttonBadwords.addEventListener('click', () => {
+            modalBadwords.classList.remove('hidden');
+        });
+        closeModalBadwords.addEventListener('click', () => {
+            modalBadwords.classList.add('hidden');
+        });
+		
+		const modalLink = document.getElementById('editModalLink');
+        const buttonLink = document.getElementById('editButtonLink');
+        const closeModalLink = document.getElementById('closeModalLink');
+        buttonLink.addEventListener('click', () => {
+            modalLink.classList.remove('hidden');
+        });
+        closeModalLink.addEventListener('click', () => {
+            modalLink.classList.add('hidden');
+        });
+		
+		const modalWords = document.getElementById('modalWords');
+        const buttonWords = document.getElementById('buttonWords');
+        const closeModalWords = document.getElementById('closeModalWords');
+        buttonWords.addEventListener('click', () => {
+            modalWords.classList.remove('hidden');
+        });
+        closeModalWords.addEventListener('click', () => {
+            modalWords.classList.add('hidden');
+        });
+		
+		const modalHecker = document.getElementById('modalHecker');
+        const buttonHecker = document.getElementById('buttonHecker');
+        const closeModalHecker = document.getElementById('closeModalHecker');
+        buttonHecker.addEventListener('click', () => {
+            modalHecker.classList.remove('hidden');
+        });
+        closeModalHecker.addEventListener('click', () => {
+            modalHecker.classList.add('hidden');
+        });
+		
+		const modalDilan = document.getElementById('modalDilan');
+        const buttonDilan = document.getElementById('buttonDilan');
+        const closeModalDilan = document.getElementById('closeModalDilan');
+        buttonDilan.addEventListener('click', () => {
+            modalDilan.classList.remove('hidden');
+        });
+        closeModalDilan.addEventListener('click', () => {
+            modalDilan.classList.add('hidden');
+        });
+		
+		const modalBucin = document.getElementById('modalBucin');
+        const buttonBucin = document.getElementById('buttonBucin');
+        const closeModalBucin = document.getElementById('closeModalBucin');
+        buttonBucin.addEventListener('click', () => {
+            modalBucin.classList.remove('hidden');
+        });
+        closeModalBucin.addEventListener('click', () => {
+            modalBucin.classList.add('hidden');
+        });
+		
+		const modalQuote = document.getElementById('modalQuote');
+        const buttonQuote = document.getElementById('buttonQuote');
+        const closeModalQuote = document.getElementById('closeModalQuote');
+        buttonQuote.addEventListener('click', () => {
+            modalQuote.classList.remove('hidden');
+        });
+        closeModalQuote.addEventListener('click', () => {
+            modalQuote.classList.add('hidden');
+        });
+		
+		const modalWelcome = document.getElementById('modalWelcome');
+        const buttonWelcome = document.getElementById('buttonWelcome');
+        const closeModalWelcome = document.getElementById('closeModalWelcome');
+        buttonWelcome.addEventListener('click', () => {
+            modalWelcome.classList.remove('hidden');
+        });
+        closeModalWelcome.addEventListener('click', () => {
+            modalWelcome.classList.add('hidden');
+        });
+		
+		const modalGoodbye = document.getElementById('modalGoodbye');
+        const buttonGoodbye = document.getElementById('buttonGoodbye');
+        const closeModalGoodbye = document.getElementById('closeModalGoodbye');
+        buttonGoodbye.addEventListener('click', () => {
+            modalGoodbye.classList.remove('hidden');
+        });
+        closeModalGoodbye.addEventListener('click', () => {
+            modalGoodbye.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
