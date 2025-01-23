@@ -215,7 +215,7 @@
 		sidebar.classList.add('-translate-x-full');
 	});
 	
-	const ws = new WebSocket(`ws://${window.location.host}`);
+	const ws = new WebSocket(`wss://${window.location.host}`);
 
 	ws.onmessage = (event) => {
 		const data = JSON.parse(event.data);

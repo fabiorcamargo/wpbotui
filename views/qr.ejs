@@ -52,7 +52,7 @@
         const qrCodeImage = document.getElementById('qrCode');
         const restartButton = document.getElementById('restartServerButton');
 
-        const ws = new WebSocket(`ws://${window.location.host}`);
+        const ws = new WebSocket(`wss://${window.location.host}`);
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
             if (data.qrCodeUrl) {
