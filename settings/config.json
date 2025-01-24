@@ -32,7 +32,7 @@
     "CMD_STICKER": ".sticker",
     "CMD_TO_VOICE": ".tovoice",
     "CMD_COUNTRY": ".country",
-    "CMD_WEATHER": ".weather",
+    "CMD_WEATHER": ".clima",
     "CMD_SSWEB": ".ssweb",
     "CMD_SSMOBILE": ".ssmobile",
     "CMD_SEO": ".seo",
@@ -67,7 +67,7 @@
     "CMD_MD5": ".md5",
     "CMD_RIPEMD": ".ripemd",
     "CMD_BCRYPT": ".bcrypt",
-    "CMD_QUOTE": ".quote",
+    "CMD_QUOTE": ".citacao",
     "CMD_BUCIN": ".bucin",
     "CMD_DILAN": ".dilan",
     "CMD_KECKER": ".hecker",
@@ -101,7 +101,7 @@
     "GEMINI_API": "AIzaxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
     "GEMINI_PROMPT": "Anda harus berpura-pura menjadi Whastapp-Bot dan jawab pertanyaan menggunakan bahasa indonesia dengan singkat: ",
     "TO_VOICE": "pt",
-    "WIKI_LANG": "en"
+    "WIKI_LANG": "pt"
   },
   "excludeLinks": [
     "https://google.com",

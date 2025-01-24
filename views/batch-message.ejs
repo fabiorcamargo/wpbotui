@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mass Message - FHY WaBotUI</title>
+    <meta name="description" content="FHY WaBotUI permite envio de mensagens em massa para vários destinatários com facilidade." />
+    <meta name="keywords" content="WhatsApp bot, mensagens em massa, gerenciamento de mensagens, WhatsApp API" />
+    <link rel="icon" type="image/png" href="/ss1.png" sizes="32x32" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .accordion-content {
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .accordion-content.show {
+            max-height: 100vh;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-700 text-white">
+    <header class="w-full flex justify-between px-4 py-3 bg-gray-700">
+        <a href="/dashboard" class="flex">
+            <img src="/ss.png" class="h-9 w-auto" alt="FHY WaBotUI">
+            <span class="text-xs font-bold text-gray-300">v1.7</span>
+        </a>
+        <div class="gap-2 items-center flex">
+            <a href="/dashboard" class="relative bg-gray-900 hover:bg-gray-800 text-white p-2 rounded group">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                </svg>
+                <span class="absolute -ml-6 left-1/2 transform -translate-x-1/2 translate-y-2 bg-gray-900 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                    Back Dashboard
+                </span>
+            </a>
+        </div>
+    </header>
+
+    <div class="bg-gray-900 p-4 rounded">
+        <h2 class="text-xl font-bold mb-4">Mass Message</h2>
+
+        <div class="flex flex-col gap-1 mb-4">
+            <label class="text-xs md:text-sm">Delay Between Messages (milliseconds)</label>
+            <input id="delayTime" type="number" class="p-2 rounded bg-gray-900 w-full focus:outline-none border border-gray-700" placeholder="Enter delay time in milliseconds (e.g., 1000)" value="5000" required>
+        </div>
+
+        <div class="flex flex-col gap-1 mb-4">
+            <label class="text-xs md:text-sm">Upload CSV de Contatos (Coluna telefone obrigatório)</label>
+            <input id="csvFileInput" type="file" accept=".csv" class="p-2 rounded bg-gray-900 w-full focus:outline-none border border-gray-700" required onchange="handleCSVUpload()">
+        </div>        
+
+        <div class="flex flex-col gap-1 mb-4">
+            <label class="text-xs md:text-sm">Message Content</label>
+            <textarea id="messageContent" rows="4" class="p-2 rounded bg-gray-900 w-full focus:outline-none border border-gray-700" placeholder="Enter your message.." required></textarea>
+        </div>
+
+        <!-- Display available placeholders -->
+        <div id="placeholdersList" class="bg-gray-800 p-4 rounded mb-4 hidden">
+            <h3 class="text-sm font-semibold">Available Placeholders:</h3>
+            <ul id="placeholders" class="list-disc ml-4"></ul>
+        </div>
+
+        <div class="flex justify-between items-center mt-2">
+            <p id="progressStatus" class="text-sm"></p>
+            <button type="button" onclick="sendMassMessage()" class="flex items-center gap-2 bg-gray-700 hover:bg-blue-700 px-4 py-2 rounded">
+                Send
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- List for displaying status -->
+        <ul id="statusList" class="mt-4 text-sm"></ul>
+    </div>
+
+    <div id="successModal" class="hidden">
+        <p id="modalMessage"></p>
+    </div>
+
+    <script>
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function readCSV(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    const content = event.target.result;
+                    resolve(content); // Retorna o conteúdo do arquivo como string
+                };
+                
+                reader.onerror = function(error) {
+                    reject(error); // Se houver erro ao ler o arquivo, rejeita a promise
+                };
+        
+                reader.readAsText(file); // Lê o arquivo como texto
+            });
+        }
+
+        function handleCSVUpload() {
+            const fileInput = document.getElementById('csvFileInput');
+            const file = fileInput.files[0];
+        
+            if (file) {
+                readCSV(file).then(content => {
+                    console.log(content); // Verifique o conteúdo lido
+                    if (typeof content !== 'string') {
+                        throw new Error("O conteúdo não é uma string.");
+                    }
+        
+                    const firstLine = content.split("\n")[0];
+                    const separator = firstLine.includes(";") ? ";" : ",";
+                    const rows = content.split("\n").map(row => row.trim()).filter(row => row !== "");
+                    const headers = rows.shift().split(separator).map(header => header.trim());
+                    displayPlaceholders(headers);
+                }).catch(error => {
+                    console.error("Erro ao ler o arquivo CSV:", error);
+                    alert("Erro ao ler o arquivo CSV.");
+                });
+            }
+        }
+        
+
+        function displayPlaceholders(headers) {
+            const placeholdersList = document.getElementById('placeholdersList');
+            const placeholders = document.getElementById('placeholders');
+            placeholders.innerHTML = '';
+
+            headers.forEach(header => {
+                const listItem = document.createElement('li');
+                listItem.innerText = `{${header}}`;
+                placeholders.appendChild(listItem);
+            });
+
+            placeholdersList.classList.remove('hidden');
+        }
+
+        async function checkWhatsAppNumber(number) {
+            try {
+                const response = await fetch('/check-number', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ number }),
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    return result.isRegistered;
+                } else {
+                    console.error(`Erro ao verificar número ${number}:`, response.statusText);
+                    return false;
+                }
+            } catch (error) {
+                console.error('Erro ao verificar número:', error);
+                return false;
+            }
+        }
+
+        async function sendMassMessage() {
+            const fileInput = document.getElementById('csvFileInput');
+            const message = document.getElementById('messageContent').value;
+            const delayTime = parseInt(document.getElementById('delayTime').value, 10) || 0;
+            const statusList = document.getElementById('statusList');
+            const progressStatus = document.getElementById('progressStatus');
+        
+            if (!fileInput.files[0] || !message) {
+                alert("Por favor, envie um arquivo CSV e uma mensagem.");
+                return;
+            }
+        
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+        
+            reader.onload = async function (e) {
+                const content = e.target.result;
+                
+                // Detectar separador (',' ou ';')
+                const firstLine = content.split("\n")[0];
+                const separator = firstLine.includes(";") ? ";" : ",";
+        
+                // Dividir linhas e remover espaços desnecessários
+                const rows = content.split("\n").map(row => row.trim()).filter(row => row !== "");
+        
+                // Pegar o cabeçalho do CSV
+                const headers = rows.shift().split(separator).map(header => header.trim());
+        
+                if (!headers.includes("telefone")) {
+                    alert("O arquivo CSV deve conter uma coluna chamada 'telefone'.");
+                    return;
+                }
+        
+                // Transformar linhas em objetos
+                const contacts = rows.map(row => {
+                    const values = row.split(separator).map(value => value.trim());
+                    const contact = {};
+                    headers.forEach((header, index) => {
+                        contact[header] = values[index];
+                    });
+                    return contact;
+                });
+        
+                if (contacts.length === 0) {
+                    alert("O arquivo CSV não contém contatos válidos.");
+                    return;
+                }
+        
+                // Função para formatar o número de telefone
+                function formatPhoneNumber(phoneNumber) {
+                    phoneNumber = phoneNumber.replace(/\D/g, ''); // Remover caracteres não numéricos
+                    if (phoneNumber.startsWith('55')) { // Verifica se começa com o DDI do Brasil
+                        const ddd = phoneNumber.substring(2, 4); // DDD
+                        let number = phoneNumber.substring(4); // Número do telefone
+                        if (number.length > 8 && number.startsWith('9')) { // Verifica se o número tem mais de 8 dígitos e começa com "9"
+                            number = number.substring(1); // Remove o "9" extra
+                        }
+                        return `55${ddd}${number}`; // Retorna o número formatado
+                    }
+                    return phoneNumber; // Retorna o número original se não for válido
+                }
+        
+                const messageTemplate = document.getElementById('messageContent').value;
+                const delayTime = parseInt(document.getElementById('delayTime').value, 10) || 0;
+                const statusList = document.getElementById('statusList');
+                const progressStatus = document.getElementById('progressStatus');
+        
+                // Reset status display
+                statusList.innerHTML = '';
+                progressStatus.innerText = `Enviando mensagens para ${contacts.length} contatos...`;
+        
+                let sentCount = 0;
+        
+                for (let contact of contacts) {
+                    const listItem = document.createElement('li');
+                    const formattedPhone = formatPhoneNumber(contact.telefone); // Formata o número
+        
+                    listItem.innerText = `Verificando WhatsApp para ${formattedPhone}...`;
+                    statusList.appendChild(listItem);
+        
+                    // Verificar se o número está registrado no WhatsApp
+                    const isRegistered = await checkWhatsAppNumber(formattedPhone);
+        
+                    if (!isRegistered) {
+                        listItem.innerText = `Número ${formattedPhone} não está registrado no WhatsApp. Ignorando...`;
+                        continue;
+                    }
+        
+                    // Personalizar mensagem com variáveis do CSV
+                    const personalizedMessage = messageTemplate.replace(/\{(\w+)\}/g, (_, variable) => contact[variable] || `{${variable}}`);
+        
+                    listItem.innerText = `Enviando para ${formattedPhone}...`;
+        
+                    const payload = {
+                        text: [
+                            {
+                                id: formattedPhone,
+                                messageText: personalizedMessage,
+                            },
+                        ],
+                    };
+        
+                    try {
+                        const response = await fetch('/send-message', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(payload),
+                        });
+        
+                        if (response.ok) {
+                            listItem.innerText = `Mensagem enviada para ${formattedPhone}: Sucesso`;
+                        } else {
+                            listItem.innerText = `Mensagem enviada para ${formattedPhone}: Falhou`;
+                        }
+                    } catch (error) {
+                        console.error('Erro ao enviar mensagem:', error);
+                        listItem.innerText = `Mensagem enviada para ${formattedPhone}: Erro`;
+                    }
+        
+                    // Atualizar progresso
+                    sentCount++;
+                    progressStatus.innerText = `Enviadas ${sentCount} de ${contacts.length} mensagens...`;
+        
+                    // Aguardar o tempo de delay
+                    await sleep(delayTime);
+                }
+        
+                progressStatus.innerText = `Processo concluído!`;
+            };
+        
+            reader.readAsText(file);
+        }
+        
+    </script>
+</body>
+</html>

@@ -14,7 +14,7 @@ async function WikipediaAI(query, sock, sender, message) {
 
         if (searchResults.length > 0) {
             const result = searchResults[0];
-           const responseMessage = `*${result.title}*\n\n${result.snippet.replace(/<[^>]+>/g, '')}...\n\nBaca lebih lanjut di: https://${config.settings.WIKI_LANG}.wikipedia.org/wiki/${encodeURIComponent(result.title)}`;
+           const responseMessage = `*${result.title}*\n\n${result.snippet.replace(/<[^>]+>/g, '')}...\n\nLeia mais em: https://${config.settings.WIKI_LANG}.wikipedia.org/wiki/${encodeURIComponent(result.title)}`;
             console.log(`Response: ${responseMessage}`);
             return responseMessage;
         } else {

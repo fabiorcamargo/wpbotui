@@ -877,7 +877,7 @@ async function AdvancedResponse(messageContent, sender, sock, message) {
 			await sock.sendMessage(sender, { react: { text: "⌛", key: message.key } });
 			try {
 				const weatherJson = await Weather(cityName);
-				const responseMessage = `*Weather in ${cityName}*\n\nTemperature: ${weatherJson.temperature}\nCondition: ${weatherJson.condition}\nWind: ${weatherJson.wind}\nHumidity: ${weatherJson.humidity}`;
+				const responseMessage = `*Clima em ${cityName}*\n\nTemperatura: ${weatherJson.temperature}\nCondição: ${weatherJson.condition}\nVento: ${weatherJson.wind}\nUmidade: ${weatherJson.humidity}`;
 				await sock.sendMessage(sender, { text: responseMessage }, { quoted: message });
 				await sock.sendMessage(sender, { react: { text: "✅", key: message.key } });
 			} catch (error) {

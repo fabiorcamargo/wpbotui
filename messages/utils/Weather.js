@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 async function Weather(cityName) {
-  const weatherUrl = `https://wttr.in/${cityName}?format=%t|%C|%w|%h&lang=id&m`;
+  const weatherUrl = `https://wttr.in/${cityName}?format=%t|%C|%w|%h&lang=pt-br&m`;
 
   try {
     const response = await axios.get(weatherUrl);

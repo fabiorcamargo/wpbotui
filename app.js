@@ -1,3 +1,5 @@
+require('dotenv').config(); // Carrega as variáveis do .env
+
 const express = require('express');
 const { WebSocketServer } = require('ws');
 const { WaBot } = require('fhy-wabot');
@@ -13,6 +15,10 @@ const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
 const configAutoResponsePath = path.join(__dirname, './settings/auto_response.json');
 const configEntertainPath = path.join(__dirname, './settings/entertain.json');
 
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -25,6 +31,37 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Middleware para analisar os cookies
+app.use(cookieParser());
+
+// Middleware de verificação de token
+const verifyToken = (req, res, next) => {
+    const token = req.cookies.token; // Pegando o token do cookie
+
+    if (!token) {
+        // Redireciona para o login com a URL original como parâmetro
+        return res.redirect(`/login?redirect=${encodeURIComponent(req.originalUrl)}`);
+    }
+
+    // Validando o token JWT
+    jwt.verify(token, 'seu_segredo_aqui', (err, decoded) => {
+        if (err) {
+            return res.redirect(`/login?redirect=${encodeURIComponent(req.originalUrl)}`);
+        }
+
+        // O token é válido, armazenando os dados decodificados no `req.user`
+        req.user = decoded;
+
+        // Passa o controle para a próxima função de middleware ou rota
+        next();
+    });
+};
+
+
+module.exports = verifyToken;
+
+
 
 const QRCustom = async (qr) => {
     try {
@@ -43,6 +80,8 @@ const QRCustom = async (qr) => {
 };
 
 const ManualResponse = {};
+
+
 
 (async () => {
     sock = await WaBot(QRUrl = config.settings.QR_URL, QRCustom, AutoResponse, ManualResponse, self = config.settings.SELF);
@@ -209,7 +248,29 @@ const saveMessageToHistory = (messageData, filePath, res) => {
     });
 };
 
-app.get('/', (req, res) => {
+// Banco de dados simulado (para fins de exemplo)
+const users = [
+    {
+        id: 1,
+        username: 'usuario1',
+        password: '$2a$10$c4ICCvQmgUh29DI5C2uNkuAu1obdmdUIPcjWHrwnk/X45XnS8iVAK' // senha = 'senha123'
+    },
+    {
+        id: 2,
+        username: 'usuario2',
+        password: '$2a$10$Ek9pMlTrqaROhMvQnRk2sOuURAsKg1WiOV2yTLyNjS78z7PyUfhsy' // senha = 'senha456'
+    }
+];
+
+// Rota protegida
+app.get('/protected', verifyToken, (req, res) => {
+        const token = req.cookies.token; // Pegando o token do cookie
+        // Token válido, você pode usar `decoded` para acessar os dados do usuário
+        res.json({ message: 'Acesso autorizado', user: req.user });
+});
+
+
+app.get('/qr', verifyToken, (req, res) => {
     const sessionPath = path.join(__dirname, 'auth_info', 'session-');
     fs.readdir(path.join(__dirname, 'auth_info'), (err, files) => {
         if (err) {
@@ -220,11 +281,11 @@ app.get('/', (req, res) => {
         if (sessionExists) {
             return res.redirect('/dashboard');
         }
-        res.render('qr');
+        res.render('qr',  { wsProtocol: process.env.WS_PROTOCOL || 'wss' });
     });
 });
 
-app.get('/dashboard', (req, res) => {
+app.get('/dashboard', verifyToken, (req, res) => {
     const authInfoPath = path.join(__dirname, 'auth_info');
     const sessionPath = path.join(authInfoPath, 'session-');
     if (!fs.existsSync(authInfoPath)) {
@@ -234,10 +295,10 @@ app.get('/dashboard', (req, res) => {
     if (sessionFiles.length === 0) {
         return res.redirect('/');
     }
-    res.render('dashboard');
+    res.render('dashboard',  { wsProtocol: process.env.WS_PROTOCOL || 'wss' });
 });
 
-app.get('/settings', (req, res) => {
+app.get('/settings', verifyToken, (req, res) => {
     const authInfoPath = path.join(__dirname, 'auth_info');
     const sessionPath = path.join(authInfoPath, 'session-');
     if (!fs.existsSync(authInfoPath)) {
@@ -272,7 +333,7 @@ app.get('/settings', (req, res) => {
     });
 });
 
-app.post('/check-number', async (req, res) => {
+app.post('/check-number', verifyToken, async (req, res) => {
     const { number } = req.body;
 
     if (!number) {
@@ -292,7 +353,7 @@ app.post('/check-number', async (req, res) => {
     }
 });
 
-app.post('/settings/update', (req, res) => {
+app.post('/settings/update', verifyToken, (req, res) => {
     const updatedAutoResponse = req.body.autoCommand;
     fs.writeFile(configAutoResponsePath, updatedAutoResponse, 'utf8', (err) => {
         if (err) {
@@ -302,7 +363,7 @@ app.post('/settings/update', (req, res) => {
     });
 });
 
-app.post('/settings/katakata', (req, res) => {
+app.post('/settings/katakata', verifyToken, (req, res) => {
     fs.readFile(configEntertainPath, 'utf8', (err, data) => {
         if (err) return res.status(500).json({ error: 'Failed to read auto response file' });
 
@@ -326,7 +387,7 @@ app.post('/settings/katakata', (req, res) => {
     });
 });
 
-app.post('/settings/hecker', (req, res) => {
+app.post('/settings/hecker', verifyToken, (req, res) => {
     fs.readFile(configEntertainPath, 'utf8', (err, data) => {
         if (err) return res.status(500).json({ error: 'Failed to read auto response file' });
 
@@ -350,7 +411,7 @@ app.post('/settings/hecker', (req, res) => {
     });
 });
 
-app.post('/settings/bucin', (req, res) => {
+app.post('/settings/bucin', verifyToken, (req, res) => {
     fs.readFile(configEntertainPath, 'utf8', (err, data) => {
         if (err) return res.status(500).json({ error: 'Failed to read auto response file' });
 
@@ -374,7 +435,7 @@ app.post('/settings/bucin', (req, res) => {
     });
 });
 
-app.post('/settings/dilan', (req, res) => {
+app.post('/settings/dilan', verifyToken, (req, res) => {
     fs.readFile(configEntertainPath, 'utf8', (err, data) => {
         if (err) return res.status(500).json({ error: 'Failed to read auto response file' });
 
@@ -398,7 +459,7 @@ app.post('/settings/dilan', (req, res) => {
     });
 });
 
-app.post('/settings/quote', (req, res) => {
+app.post('/settings/quote', verifyToken, (req, res) => {
     fs.readFile(configEntertainPath, 'utf8', (err, data) => {
         if (err) return res.status(500).json({ error: 'Failed to read auto response file' });
 
@@ -422,7 +483,7 @@ app.post('/settings/quote', (req, res) => {
     });
 });
 
-app.post('/edit-welcome', (req, res) => {
+app.post('/edit-welcome', verifyToken, (req, res) => {
     try {
         const welcomeGreeting = req.body.welcomeGreeting.trim();
         config.cmdGroup.CMD_WELCOME_TEXT = welcomeGreeting;
@@ -434,7 +495,7 @@ app.post('/edit-welcome', (req, res) => {
     }
 });
 
-app.post('/edit-goodbye', (req, res) => {
+app.post('/edit-goodbye', verifyToken, (req, res) => {
     try {
         const goodbyeGreeting = req.body.goodbyeGreeting.trim();
         config.cmdGroup.CMD_GOODBYE_TEXT = goodbyeGreeting;
@@ -446,7 +507,7 @@ app.post('/edit-goodbye', (req, res) => {
     }
 });
 
-app.post('/update-badwords', (req, res) => {
+app.post('/update-badwords', verifyToken, (req, res) => {
     try {
         const badwordsArray = req.body.badwords.split(',').map(word => word.trim()).filter(word => word);
         config.badwords = badwordsArray;
@@ -458,7 +519,7 @@ app.post('/update-badwords', (req, res) => {
     }
 });
 
-app.post('/update-link', (req, res) => {
+app.post('/update-link', verifyToken, (req, res) => {
     try {
         const linkArray = req.body.linkExcluded.split(',').map(word => word.trim()).filter(word => word);
         config.excludeLinks = linkArray;
@@ -470,7 +531,7 @@ app.post('/update-link', (req, res) => {
     }
 });
 
-app.post('/settings', (req, res) => {
+app.post('/settings', verifyToken, (req, res) => {
     const newCommands = {
         CMD_FREEPIK: req.body.CMD_FREEPIK,
         CMD_YOUTUBE: req.body.CMD_YOUTUBE,
@@ -572,7 +633,7 @@ app.post('/settings', (req, res) => {
     });
 });
 
-app.post('/settings-group', (req, res) => {
+app.post('/settings-group', verifyToken,  (req, res) => {
     const newCommands = {
         CMD_WELCOME: req.body.CMD_WELCOME === 'true',
         CMD_GOODBYE: req.body.CMD_GOODBYE === 'true',
@@ -603,7 +664,7 @@ app.post('/settings-group', (req, res) => {
     });
 });
 
-app.post('/settings-utl', (req, res) => {
+app.post('/settings-utl', verifyToken, (req, res) => {
     const newCommands = {
         QR_URL: req.body.QR_URL === 'true',
         SELF: req.body.SELF === 'true',
@@ -631,14 +692,14 @@ app.post('/settings-utl', (req, res) => {
     });
 });
 
-app.post('/restart-server', (req, res) => {
+app.post('/restart-server', verifyToken, (req, res) => {
     res.json({ success: true, message: 'Server is restarting...' });
     setTimeout(() => {
         process.exit(0);
     }, 1000);
 });
 
-app.delete('/delete-auth-info', (req, res) => {
+app.delete('/delete-auth-info', verifyToken, (req, res) => {
     const authInfoPath = path.join(__dirname, 'auth_info');
     fs.rm(authInfoPath, { recursive: true, force: true }, (err) => {
         if (err) {
@@ -654,7 +715,7 @@ app.delete('/delete-auth-info', (req, res) => {
     });
 });
 
-app.get('/message', (req, res) => {
+app.get('/message', verifyToken, (req, res) => {
     const authInfoPath = path.join(__dirname, 'auth_info');
     const sessionPath = path.join(authInfoPath, 'session-');
     if (!fs.existsSync(authInfoPath)) {
@@ -664,10 +725,37 @@ app.get('/message', (req, res) => {
     if (sessionFiles.length === 0) {
         return res.redirect('/');
     }
+
     res.render('message');
 });
 
-app.post('/send-message', async (req, res) => {
+// Rota GET para exibir a página de login
+app.get('/login', (req, res) => {
+    res.render('login', { error: null, username: '' });
+});
+
+// Rota POST para realizar login
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+
+    // Exemplo de autenticação simplificada
+    const user = users.find(u => u.username === username);
+
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+        return res.render('login', { 
+            error: 'Usuário ou senha inválidos!', 
+            username 
+        });
+    }
+
+    // Login bem-sucedido
+    const token = jwt.sign({ username }, 'seu_segredo_aqui', { expiresIn: '1h' });
+    res.cookie('token', token, { httpOnly: true, secure: false }); // Ajuste o `secure` conforme o ambiente
+    res.redirect('/dashboard'); // Redireciona para o dashboard
+});
+
+
+app.post('/send-message', verifyToken, async (req, res) => {
     const {
         text,
         image,
@@ -755,30 +843,11 @@ app.post('/send-message', async (req, res) => {
         console.error('Failed to send messages:', error);
         res.status(500).json({ error: 'Failed to send messages.' });
     }
-
-    app.get('/batch', (req, res) => {
-        const authInfoPath = path.join(__dirname, 'auth_info');
-        const sessionPath = path.join(authInfoPath, 'session-');
-    
-        // Verifica se as informações de autenticação existem
-        if (!fs.existsSync(authInfoPath)) {
-            return res.redirect('/');
-        }
-    
-        // Verifica se há arquivos de sessão disponíveis
-        const sessionFiles = fs.readdirSync(authInfoPath).filter(file => file.startsWith('session-'));
-        if (sessionFiles.length === 0) {
-            return res.redirect('/');
-        }
-    
-        // Renderiza o arquivo batch.ejs
-        res.render('batch', { title: 'Envio em Massa' });
-    });
     
 });
 
 // Rota /batch-message
-app.get('/batch-message', (req, res) => {
+app.get('/batch-message', verifyToken, (req, res) => {
     const authInfoPath = path.join(__dirname, 'auth_info');
     const sessionPath = path.join(authInfoPath, 'session-');
     
