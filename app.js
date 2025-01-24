@@ -333,26 +333,6 @@ app.get('/settings', verifyToken, (req, res) => {
     });
 });
 
-app.post('/check-number', verifyToken, async (req, res) => {
-    const { number } = req.body;
-
-    if (!number) {
-        return res.status(400).json({ error: 'Número não fornecido' });
-    }
-
-    try {
-        const result = await sock.onWhatsApp(number);
-        if (result.length > 0 && result[0].exists) {
-            return res.json({ isRegistered: true });
-        } else {
-            return res.json({ isRegistered: false });
-        }
-    } catch (error) {
-        console.error('Erro ao verificar número:', error);
-        return res.status(500).json({ error: 'Erro ao verificar número' });
-    }
-});
-
 app.post('/settings/update', verifyToken, (req, res) => {
     const updatedAutoResponse = req.body.autoCommand;
     fs.writeFile(configAutoResponsePath, updatedAutoResponse, 'utf8', (err) => {
@@ -713,6 +693,26 @@ app.delete('/delete-auth-info', verifyToken, (req, res) => {
             process.exit(0);
         }, 1000);
     });
+});
+
+app.post('/check-number', verifyToken, async (req, res) => {
+    const { number } = req.body;
+
+    if (!number) {
+        return res.status(400).json({ error: 'Número não fornecido' });
+    }
+
+    try {
+        const result = await sock.onWhatsApp(number);
+        if (result.length > 0 && result[0].exists) {
+            return res.json({ isRegistered: true });
+        } else {
+            return res.json({ isRegistered: false });
+        }
+    } catch (error) {
+        console.error('Erro ao verificar número:', error);
+        return res.status(500).json({ error: 'Erro ao verificar número' });
+    }
 });
 
 app.get('/message', verifyToken, (req, res) => {
