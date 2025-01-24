@@ -252,15 +252,30 @@ const saveMessageToHistory = (messageData, filePath, res) => {
 const users = [
     {
         id: 1,
-        username: 'usuario1',
+        username: 'fabiotb',
         password: '$2a$10$c4ICCvQmgUh29DI5C2uNkuAu1obdmdUIPcjWHrwnk/X45XnS8iVAK' // senha = 'senha123'
-    },
-    {
-        id: 2,
-        username: 'usuario2',
-        password: '$2a$10$Ek9pMlTrqaROhMvQnRk2sOuURAsKg1WiOV2yTLyNjS78z7PyUfhsy' // senha = 'senha456'
     }
 ];
+
+// Rota GET para gerar e exibir o hash de uma senha
+app.get('/hash-password/:password', (req, res) => {
+    const { password } = req.params; // Recebendo a senha do parâmetro da URL
+
+    if (!password) {
+        return res.status(400).send('Por favor, forneça uma senha.');
+    }
+
+    const saltRounds = 10; // Número de rounds para gerar o hash
+
+    // Gerando o hash da senha
+    bcrypt.hash(password, saltRounds, (err, hash) => {
+        if (err) {
+            return res.status(500).send('Erro ao gerar o hash.');
+        }
+
+        res.send(`<h1>Hash gerado</h1><p>Senha: ${password}</p><p>Hash: ${hash}</p>`);
+    });
+});
 
 // Rota protegida
 app.get('/protected', verifyToken, (req, res) => {
