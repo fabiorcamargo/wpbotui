@@ -865,5 +865,5 @@ app.get('/batch-message', verifyToken, (req, res) => {
     }
     
     // Caso contrário, renderiza a view 'batch'
-    res.render('batch');
+    res.render('batch-message');
 });
